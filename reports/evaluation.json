@@ -1,0 +1,648 @@
+{
+  "dataset": "Exemplos sintéticos em português, escritos para o projeto; conjunto de verificação de desenvolvimento.",
+  "train_count": 96,
+  "test_count": 44,
+  "test_by_category": {
+    "entrega": 6,
+    "pagamento": 6,
+    "conta": 6,
+    "produto": 6,
+    "cancelamento": 6,
+    "tecnico": 6,
+    "triagem": 8
+  },
+  "duplicate_text_overlap": 0,
+  "thresholds": {
+    "score": 0.4,
+    "margin": 0.08,
+    "similarity": 0.08
+  },
+  "routing_accuracy": 0.7955,
+  "routing_macro_f1": 0.8035,
+  "baseline_accuracy": 0.1364,
+  "baseline_macro_f1": 0.0343,
+  "in_scope_raw_accuracy": 0.9722,
+  "automatic_count": 27,
+  "automatic_accuracy": 1.0,
+  "manual_count": 17,
+  "out_of_scope_correctly_routed": 8,
+  "out_of_scope_total": 8,
+  "classification_report": {
+    "entrega": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 6.0
+    },
+    "pagamento": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 6.0
+    },
+    "conta": {
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1-score": 0.9090909090909091,
+      "support": 6.0
+    },
+    "produto": {
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1-score": 0.6666666666666666,
+      "support": 6.0
+    },
+    "cancelamento": {
+      "precision": 1.0,
+      "recall": 0.3333333333333333,
+      "f1-score": 0.5,
+      "support": 6.0
+    },
+    "tecnico": {
+      "precision": 1.0,
+      "recall": 0.8333333333333334,
+      "f1-score": 0.9090909090909091,
+      "support": 6.0
+    },
+    "triagem": {
+      "precision": 0.47058823529411764,
+      "recall": 1.0,
+      "f1-score": 0.64,
+      "support": 8.0
+    },
+    "accuracy": 0.7954545454545454,
+    "macro avg": {
+      "precision": 0.9243697478991597,
+      "recall": 0.7857142857142857,
+      "f1-score": 0.8035497835497836,
+      "support": 44.0
+    },
+    "weighted avg": {
+      "precision": 0.9037433155080214,
+      "recall": 0.7954545454545454,
+      "f1-score": 0.7961157024793387,
+      "support": 44.0
+    }
+  },
+  "confusion_labels": [
+    "entrega",
+    "pagamento",
+    "conta",
+    "produto",
+    "cancelamento",
+    "tecnico",
+    "triagem"
+  ],
+  "confusion_matrix": [
+    [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      5,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      3
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      4
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      8
+    ]
+  ],
+  "cases": [
+    {
+      "text": "Minha compra não chegou no dia prometido pela transportadora.",
+      "expected": "entrega",
+      "category": "entrega",
+      "candidate": "entrega",
+      "score": 0.4239,
+      "margin": 0.2675,
+      "similarity": 0.2732,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O rastreamento da encomenda está sem movimentação há uma semana.",
+      "expected": "entrega",
+      "category": "entrega",
+      "candidate": "entrega",
+      "score": 0.5514,
+      "margin": 0.4284,
+      "similarity": 0.5054,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Preciso incluir o número do apartamento no endereço de entrega.",
+      "expected": "entrega",
+      "category": "entrega",
+      "candidate": "entrega",
+      "score": 0.5735,
+      "margin": 0.4806,
+      "similarity": 0.5133,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O entregador registrou recebimento, porém ninguém recebeu o pacote.",
+      "expected": "entrega",
+      "category": "entrega",
+      "candidate": "entrega",
+      "score": 0.4666,
+      "margin": 0.3423,
+      "similarity": 0.2235,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Qual o prazo para o envio do meu pedido para minha cidade?",
+      "expected": "entrega",
+      "category": "entrega",
+      "candidate": "entrega",
+      "score": 0.484,
+      "margin": 0.2694,
+      "similarity": 0.3033,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O transporte do pacote está atrasado, podem verificar o rastreio?",
+      "expected": "entrega",
+      "category": "entrega",
+      "candidate": "entrega",
+      "score": 0.5947,
+      "margin": 0.4831,
+      "similarity": 0.2734,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Paguei o boleto ontem e a compra continua aguardando pagamento.",
+      "expected": "pagamento",
+      "category": "pagamento",
+      "candidate": "pagamento",
+      "score": 0.5445,
+      "margin": 0.3693,
+      "similarity": 0.2868,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Há duas cobranças iguais do meu cartão para uma única compra.",
+      "expected": "pagamento",
+      "category": "pagamento",
+      "candidate": "pagamento",
+      "score": 0.4929,
+      "margin": 0.3685,
+      "similarity": 0.3639,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Quero parcelar o valor, quais formas de pagamento vocês aceitam?",
+      "expected": "pagamento",
+      "category": "pagamento",
+      "candidate": "pagamento",
+      "score": 0.6295,
+      "margin": 0.5135,
+      "similarity": 0.3475,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Meu pix saiu da conta, mas a transação não foi confirmada.",
+      "expected": "pagamento",
+      "category": "pagamento",
+      "candidate": "pagamento",
+      "score": 0.4055,
+      "margin": 0.2309,
+      "similarity": 0.3958,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "A fatura trouxe um valor cobrado diferente do combinado.",
+      "expected": "pagamento",
+      "category": "pagamento",
+      "candidate": "pagamento",
+      "score": 0.4279,
+      "margin": 0.1931,
+      "similarity": 0.3734,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O pagamento com cartão foi recusado no checkout novamente.",
+      "expected": "pagamento",
+      "category": "pagamento",
+      "candidate": "pagamento",
+      "score": 0.7945,
+      "margin": 0.7492,
+      "similarity": 0.2966,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "A senha foi esquecida e preciso de outro link para recuperar meu acesso.",
+      "expected": "conta",
+      "category": "conta",
+      "candidate": "conta",
+      "score": 0.5988,
+      "margin": 0.4873,
+      "similarity": 0.3366,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Troquei meu celular e não consigo receber o código de autenticação.",
+      "expected": "conta",
+      "category": "conta",
+      "candidate": "conta",
+      "score": 0.4597,
+      "margin": 0.2582,
+      "similarity": 0.4789,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Como mudar o endereço de e-mail do meu cadastro?",
+      "expected": "conta",
+      "category": "conta",
+      "candidate": "conta",
+      "score": 0.4941,
+      "margin": 0.3005,
+      "similarity": 0.3741,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Tento fazer login e aparece a mensagem de usuário inválido.",
+      "expected": "conta",
+      "category": "triagem",
+      "candidate": "conta",
+      "score": 0.264,
+      "margin": 0.0651,
+      "similarity": 0.2651,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Meu perfil está bloqueado e quero recuperar a conta.",
+      "expected": "conta",
+      "category": "conta",
+      "candidate": "conta",
+      "score": 0.6194,
+      "margin": 0.5213,
+      "similarity": 0.6504,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O e-mail para ativar meu cadastro ainda não foi recebido.",
+      "expected": "conta",
+      "category": "conta",
+      "candidate": "conta",
+      "score": 0.4652,
+      "margin": 0.32,
+      "similarity": 0.2765,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "A mercadoria recebida está rachada e faltam peças no kit.",
+      "expected": "produto",
+      "category": "triagem",
+      "candidate": "produto",
+      "score": 0.3283,
+      "margin": 0.1591,
+      "similarity": 0.2394,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "O aparelho novo parou de funcionar e quero orientações da garantia.",
+      "expected": "produto",
+      "category": "triagem",
+      "candidate": "produto",
+      "score": 0.277,
+      "margin": 0.0582,
+      "similarity": 0.2325,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Veio uma cor diferente no produto que recebi.",
+      "expected": "produto",
+      "category": "produto",
+      "candidate": "produto",
+      "score": 0.5755,
+      "margin": 0.4428,
+      "similarity": 0.274,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "A embalagem estava fechada, mas o acessório não veio junto.",
+      "expected": "produto",
+      "category": "triagem",
+      "candidate": "produto",
+      "score": 0.3427,
+      "margin": 0.1168,
+      "similarity": 0.3908,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "O equipamento não liga e apresenta um ruído estranho.",
+      "expected": "produto",
+      "category": "produto",
+      "candidate": "produto",
+      "score": 0.5802,
+      "margin": 0.4652,
+      "similarity": 0.4282,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Gostaria do manual e das instruções de uso desse produto.",
+      "expected": "produto",
+      "category": "produto",
+      "candidate": "produto",
+      "score": 0.6283,
+      "margin": 0.5184,
+      "similarity": 0.5837,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Desisti e desejo cancelar a compra que ainda não foi enviada.",
+      "expected": "cancelamento",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.3939,
+      "margin": 0.1959,
+      "similarity": 0.2783,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Já postei a devolução e quero acompanhar meu reembolso.",
+      "expected": "cancelamento",
+      "category": "cancelamento",
+      "candidate": "cancelamento",
+      "score": 0.654,
+      "margin": 0.5488,
+      "similarity": 0.307,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Quero parar a renovação automática da minha assinatura.",
+      "expected": "cancelamento",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.3837,
+      "margin": 0.1738,
+      "similarity": 0.4099,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Como solicitar a etiqueta para enviar a compra de volta?",
+      "expected": "cancelamento",
+      "category": "cancelamento",
+      "candidate": "cancelamento",
+      "score": 0.6128,
+      "margin": 0.5096,
+      "similarity": 0.5012,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O pedido foi cancelado, mas ainda estou esperando o estorno.",
+      "expected": "cancelamento",
+      "category": "triagem",
+      "candidate": "pagamento",
+      "score": 0.2916,
+      "margin": 0.0039,
+      "similarity": 0.3462,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Qual o procedimento para devolver a mercadoria e receber o valor?",
+      "expected": "cancelamento",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.3255,
+      "margin": 0.1576,
+      "similarity": 0.352,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "A aplicação fecha toda vez que tento exportar um relatório.",
+      "expected": "tecnico",
+      "category": "triagem",
+      "candidate": "tecnico",
+      "score": 0.3257,
+      "margin": 0.1428,
+      "similarity": 0.2614,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Recebo erro 500 e a página do site não carrega.",
+      "expected": "tecnico",
+      "category": "tecnico",
+      "candidate": "tecnico",
+      "score": 0.4781,
+      "margin": 0.3549,
+      "similarity": 0.5296,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "A API da integração está dando timeout nas consultas.",
+      "expected": "tecnico",
+      "category": "tecnico",
+      "candidate": "tecnico",
+      "score": 0.4496,
+      "margin": 0.2841,
+      "similarity": 0.359,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O botão de anexar não funciona e o upload fica travado.",
+      "expected": "tecnico",
+      "category": "tecnico",
+      "candidate": "tecnico",
+      "score": 0.4795,
+      "margin": 0.3678,
+      "similarity": 0.3064,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "O sistema está indisponível para todos os usuários da empresa.",
+      "expected": "tecnico",
+      "category": "tecnico",
+      "candidate": "tecnico",
+      "score": 0.51,
+      "margin": 0.373,
+      "similarity": 0.7413,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "A tela fica branca e o navegador informa falha de conexão com o servidor.",
+      "expected": "tecnico",
+      "category": "tecnico",
+      "candidate": "tecnico",
+      "score": 0.5047,
+      "margin": 0.3977,
+      "similarity": 0.3043,
+      "needs_review": false,
+      "reason": "Sugestão do classificador local."
+    },
+    {
+      "text": "Qual é a receita de um bolo de cenoura?",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "conta",
+      "score": 0.2242,
+      "margin": 0.0285,
+      "similarity": 0.2095,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Gostaria de uma previsão do tempo para amanhã.",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.258,
+      "margin": 0.02,
+      "similarity": 0.2605,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Quero aprender a tocar violão e estudar música.",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.3225,
+      "margin": 0.1729,
+      "similarity": 0.2521,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Quantas luas existem no planeta Júpiter?",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "tecnico",
+      "score": 0.2716,
+      "margin": 0.0488,
+      "similarity": 0.202,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Indique um roteiro de turismo para minhas férias.",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "conta",
+      "score": 0.202,
+      "margin": 0.0069,
+      "similarity": 0.1877,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Estou procurando dicas de jardinagem para plantar tomates.",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.2132,
+      "margin": 0.0087,
+      "similarity": 0.2153,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Você consegue traduzir um poema em italiano?",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "tecnico",
+      "score": 0.2532,
+      "margin": 0.0525,
+      "similarity": 0.1717,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    },
+    {
+      "text": "Preciso de uma recomendação de filme de aventura.",
+      "expected": "triagem",
+      "category": "triagem",
+      "candidate": "cancelamento",
+      "score": 0.2678,
+      "margin": 0.0832,
+      "similarity": 0.2272,
+      "needs_review": true,
+      "reason": "Pontuação, separação ou similaridade insuficiente; classificação manual necessária."
+    }
+  ],
+  "limitations": "Base pequena, sintética e relacionada ao desenvolvimento. As pontuações não são probabilidades calibradas. Não mede qualidade em atendimentos reais ou rascunhos de resposta."
+}

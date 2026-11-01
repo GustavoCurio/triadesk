@@ -1,0 +1,178 @@
+[
+  {
+    "text": "Minha compra não chegou no dia prometido pela transportadora.",
+    "category": "entrega"
+  },
+  {
+    "text": "O rastreamento da encomenda está sem movimentação há uma semana.",
+    "category": "entrega"
+  },
+  {
+    "text": "Preciso incluir o número do apartamento no endereço de entrega.",
+    "category": "entrega"
+  },
+  {
+    "text": "O entregador registrou recebimento, porém ninguém recebeu o pacote.",
+    "category": "entrega"
+  },
+  {
+    "text": "Qual o prazo para o envio do meu pedido para minha cidade?",
+    "category": "entrega"
+  },
+  {
+    "text": "O transporte do pacote está atrasado, podem verificar o rastreio?",
+    "category": "entrega"
+  },
+  {
+    "text": "Paguei o boleto ontem e a compra continua aguardando pagamento.",
+    "category": "pagamento"
+  },
+  {
+    "text": "Há duas cobranças iguais do meu cartão para uma única compra.",
+    "category": "pagamento"
+  },
+  {
+    "text": "Quero parcelar o valor, quais formas de pagamento vocês aceitam?",
+    "category": "pagamento"
+  },
+  {
+    "text": "Meu pix saiu da conta, mas a transação não foi confirmada.",
+    "category": "pagamento"
+  },
+  {
+    "text": "A fatura trouxe um valor cobrado diferente do combinado.",
+    "category": "pagamento"
+  },
+  {
+    "text": "O pagamento com cartão foi recusado no checkout novamente.",
+    "category": "pagamento"
+  },
+  {
+    "text": "A senha foi esquecida e preciso de outro link para recuperar meu acesso.",
+    "category": "conta"
+  },
+  {
+    "text": "Troquei meu celular e não consigo receber o código de autenticação.",
+    "category": "conta"
+  },
+  {
+    "text": "Como mudar o endereço de e-mail do meu cadastro?",
+    "category": "conta"
+  },
+  {
+    "text": "Tento fazer login e aparece a mensagem de usuário inválido.",
+    "category": "conta"
+  },
+  {
+    "text": "Meu perfil está bloqueado e quero recuperar a conta.",
+    "category": "conta"
+  },
+  {
+    "text": "O e-mail para ativar meu cadastro ainda não foi recebido.",
+    "category": "conta"
+  },
+  {
+    "text": "A mercadoria recebida está rachada e faltam peças no kit.",
+    "category": "produto"
+  },
+  {
+    "text": "O aparelho novo parou de funcionar e quero orientações da garantia.",
+    "category": "produto"
+  },
+  {
+    "text": "Veio uma cor diferente no produto que recebi.",
+    "category": "produto"
+  },
+  {
+    "text": "A embalagem estava fechada, mas o acessório não veio junto.",
+    "category": "produto"
+  },
+  {
+    "text": "O equipamento não liga e apresenta um ruído estranho.",
+    "category": "produto"
+  },
+  {
+    "text": "Gostaria do manual e das instruções de uso desse produto.",
+    "category": "produto"
+  },
+  {
+    "text": "Desisti e desejo cancelar a compra que ainda não foi enviada.",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Já postei a devolução e quero acompanhar meu reembolso.",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Quero parar a renovação automática da minha assinatura.",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Como solicitar a etiqueta para enviar a compra de volta?",
+    "category": "cancelamento"
+  },
+  {
+    "text": "O pedido foi cancelado, mas ainda estou esperando o estorno.",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Qual o procedimento para devolver a mercadoria e receber o valor?",
+    "category": "cancelamento"
+  },
+  {
+    "text": "A aplicação fecha toda vez que tento exportar um relatório.",
+    "category": "tecnico"
+  },
+  {
+    "text": "Recebo erro 500 e a página do site não carrega.",
+    "category": "tecnico"
+  },
+  {
+    "text": "A API da integração está dando timeout nas consultas.",
+    "category": "tecnico"
+  },
+  {
+    "text": "O botão de anexar não funciona e o upload fica travado.",
+    "category": "tecnico"
+  },
+  {
+    "text": "O sistema está indisponível para todos os usuários da empresa.",
+    "category": "tecnico"
+  },
+  {
+    "text": "A tela fica branca e o navegador informa falha de conexão com o servidor.",
+    "category": "tecnico"
+  },
+  {
+    "text": "Qual é a receita de um bolo de cenoura?",
+    "category": "triagem"
+  },
+  {
+    "text": "Gostaria de uma previsão do tempo para amanhã.",
+    "category": "triagem"
+  },
+  {
+    "text": "Quero aprender a tocar violão e estudar música.",
+    "category": "triagem"
+  },
+  {
+    "text": "Quantas luas existem no planeta Júpiter?",
+    "category": "triagem"
+  },
+  {
+    "text": "Indique um roteiro de turismo para minhas férias.",
+    "category": "triagem"
+  },
+  {
+    "text": "Estou procurando dicas de jardinagem para plantar tomates.",
+    "category": "triagem"
+  },
+  {
+    "text": "Você consegue traduzir um poema em italiano?",
+    "category": "triagem"
+  },
+  {
+    "text": "Preciso de uma recomendação de filme de aventura.",
+    "category": "triagem"
+  }
+]

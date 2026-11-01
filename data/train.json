@@ -1,0 +1,386 @@
+[
+  {
+    "text": "Meu pedido está atrasado e ainda não chegou à minha casa",
+    "category": "entrega"
+  },
+  {
+    "text": "Preciso do código de rastreamento da encomenda",
+    "category": "entrega"
+  },
+  {
+    "text": "O rastreio diz entregue mas não recebi o pacote",
+    "category": "entrega"
+  },
+  {
+    "text": "Quero consultar a previsão de entrega do pedido",
+    "category": "entrega"
+  },
+  {
+    "text": "A transportadora não localizou meu endereço",
+    "category": "entrega"
+  },
+  {
+    "text": "Meu pacote está parado no centro de distribuição",
+    "category": "entrega"
+  },
+  {
+    "text": "Como acompanhar o envio da minha compra",
+    "category": "entrega"
+  },
+  {
+    "text": "O entregador veio mas eu não estava em casa",
+    "category": "entrega"
+  },
+  {
+    "text": "Minha encomenda foi enviada para outra cidade",
+    "category": "entrega"
+  },
+  {
+    "text": "Gostaria de corrigir o endereço antes da entrega",
+    "category": "entrega"
+  },
+  {
+    "text": "Não consigo rastrear o pedido na transportadora",
+    "category": "entrega"
+  },
+  {
+    "text": "Faltou informar o complemento do endereço de entrega",
+    "category": "entrega"
+  },
+  {
+    "text": "O prazo para receber o pacote já terminou",
+    "category": "entrega"
+  },
+  {
+    "text": "A entrega está com status de destinatário ausente",
+    "category": "entrega"
+  },
+  {
+    "text": "O pedido não saiu para transporte até agora",
+    "category": "entrega"
+  },
+  {
+    "text": "Onde está a encomenda que comprei na semana passada",
+    "category": "entrega"
+  },
+  {
+    "text": "Meu cartão foi cobrado duas vezes pela mesma compra",
+    "category": "pagamento"
+  },
+  {
+    "text": "O boleto foi pago mas ainda consta pendente",
+    "category": "pagamento"
+  },
+  {
+    "text": "Quero a segunda via do boleto de pagamento",
+    "category": "pagamento"
+  },
+  {
+    "text": "Meu pix foi feito e o pagamento não foi reconhecido",
+    "category": "pagamento"
+  },
+  {
+    "text": "A cobrança no cartão apresenta um valor diferente",
+    "category": "pagamento"
+  },
+  {
+    "text": "Não consigo pagar usando cartão de crédito",
+    "category": "pagamento"
+  },
+  {
+    "text": "Como alterar a forma de pagamento da compra",
+    "category": "pagamento"
+  },
+  {
+    "text": "As parcelas do cartão estão com valores incorretos",
+    "category": "pagamento"
+  },
+  {
+    "text": "Recebi uma cobrança que não reconheço na fatura",
+    "category": "pagamento"
+  },
+  {
+    "text": "Preciso confirmar se o pagamento foi aprovado",
+    "category": "pagamento"
+  },
+  {
+    "text": "O checkout recusou meu cartão de débito",
+    "category": "pagamento"
+  },
+  {
+    "text": "Estou com dúvida sobre o vencimento do boleto",
+    "category": "pagamento"
+  },
+  {
+    "text": "A transação aparece duplicada no extrato",
+    "category": "pagamento"
+  },
+  {
+    "text": "O valor cobrado foi maior que o total da compra",
+    "category": "pagamento"
+  },
+  {
+    "text": "Existe alguma opção para parcelar o pagamento",
+    "category": "pagamento"
+  },
+  {
+    "text": "O comprovante de pix foi gerado mas o valor não baixou",
+    "category": "pagamento"
+  },
+  {
+    "text": "Esqueci minha senha e não consigo entrar na conta",
+    "category": "conta"
+  },
+  {
+    "text": "O link de recuperação de senha expirou",
+    "category": "conta"
+  },
+  {
+    "text": "Preciso trocar o e-mail cadastrado no meu perfil",
+    "category": "conta"
+  },
+  {
+    "text": "Não recebo o código de verificação para login",
+    "category": "conta"
+  },
+  {
+    "text": "Minha conta foi bloqueada depois de tentar acessar",
+    "category": "conta"
+  },
+  {
+    "text": "Como atualizar meu telefone no cadastro",
+    "category": "conta"
+  },
+  {
+    "text": "Quero recuperar o acesso ao meu perfil",
+    "category": "conta"
+  },
+  {
+    "text": "O sistema informa usuário ou senha inválidos",
+    "category": "conta"
+  },
+  {
+    "text": "Meu cadastro usa um e-mail antigo que não tenho mais",
+    "category": "conta"
+  },
+  {
+    "text": "Gostaria de ativar a verificação em duas etapas",
+    "category": "conta"
+  },
+  {
+    "text": "Preciso alterar os dados do meu cadastro",
+    "category": "conta"
+  },
+  {
+    "text": "O código de autenticação está sendo rejeitado",
+    "category": "conta"
+  },
+  {
+    "text": "Fiz um cadastro e não chegou o e-mail de ativação",
+    "category": "conta"
+  },
+  {
+    "text": "Perdi o acesso ao telefone usado no login",
+    "category": "conta"
+  },
+  {
+    "text": "Suspeito que minha conta foi acessada por outra pessoa",
+    "category": "conta"
+  },
+  {
+    "text": "Minha conta invadida teve a senha alterada",
+    "category": "conta"
+  },
+  {
+    "text": "O produto chegou quebrado dentro da embalagem",
+    "category": "produto"
+  },
+  {
+    "text": "O equipamento não liga mesmo conectado à tomada",
+    "category": "produto"
+  },
+  {
+    "text": "Recebi um item com peças faltando",
+    "category": "produto"
+  },
+  {
+    "text": "O tamanho do produto é diferente do anunciado",
+    "category": "produto"
+  },
+  {
+    "text": "A cor do produto recebido não corresponde à foto",
+    "category": "produto"
+  },
+  {
+    "text": "O aparelho apresenta defeito depois de poucos dias",
+    "category": "produto"
+  },
+  {
+    "text": "Gostaria de saber como acionar a garantia do produto",
+    "category": "produto"
+  },
+  {
+    "text": "A embalagem veio sem o acessório que acompanha o item",
+    "category": "produto"
+  },
+  {
+    "text": "A mercadoria apresenta rachaduras e riscos",
+    "category": "produto"
+  },
+  {
+    "text": "O produto está com funcionamento irregular",
+    "category": "produto"
+  },
+  {
+    "text": "Recebi um modelo diferente daquele que comprei",
+    "category": "produto"
+  },
+  {
+    "text": "O material do item veio rasgado",
+    "category": "produto"
+  },
+  {
+    "text": "A qualidade do produto ficou abaixo da descrição",
+    "category": "produto"
+  },
+  {
+    "text": "Preciso do manual de uso do equipamento",
+    "category": "produto"
+  },
+  {
+    "text": "Um dos componentes do kit veio danificado",
+    "category": "produto"
+  },
+  {
+    "text": "O aparelho faz ruído estranho durante o uso",
+    "category": "produto"
+  },
+  {
+    "text": "Quero cancelar meu pedido antes do envio",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Como faço para devolver minha compra",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Desisti da compra e gostaria de solicitar reembolso",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Quero saber o prazo de devolução dos produtos",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Preciso cancelar a assinatura que contratei",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Onde encontro a etiqueta de logística reversa",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Gostaria de acompanhar a solicitação de estorno",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Já devolvi o item e aguardo o reembolso",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Solicito o cancelamento da compra feita ontem",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Quero exercer a desistência e devolver o pedido",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Meu pedido de devolução não foi respondido",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Como enviar o produto de volta para a loja",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Preciso interromper a renovação da assinatura",
+    "category": "cancelamento"
+  },
+  {
+    "text": "O estorno da compra cancelada ainda não apareceu",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Gostaria de trocar a compra por devolução do valor",
+    "category": "cancelamento"
+  },
+  {
+    "text": "Cancelei o pedido e preciso acompanhar o processo",
+    "category": "cancelamento"
+  },
+  {
+    "text": "O site apresenta erro 500 quando abro a página",
+    "category": "tecnico"
+  },
+  {
+    "text": "O aplicativo fecha sozinho depois da atualização",
+    "category": "tecnico"
+  },
+  {
+    "text": "O botão de salvar não responde ao clique",
+    "category": "tecnico"
+  },
+  {
+    "text": "O sistema fora do ar impede o trabalho da equipe",
+    "category": "tecnico"
+  },
+  {
+    "text": "A página fica em branco no navegador",
+    "category": "tecnico"
+  },
+  {
+    "text": "A integração da API retorna erro de conexão",
+    "category": "tecnico"
+  },
+  {
+    "text": "Não consigo anexar arquivos porque o upload falha",
+    "category": "tecnico"
+  },
+  {
+    "text": "O aplicativo está muito lento em todas as telas",
+    "category": "tecnico"
+  },
+  {
+    "text": "O relatório trava durante a exportação",
+    "category": "tecnico"
+  },
+  {
+    "text": "A tela apresenta um erro inesperado ao carregar",
+    "category": "tecnico"
+  },
+  {
+    "text": "O sistema indisponível está afetando todos os usuários",
+    "category": "tecnico"
+  },
+  {
+    "text": "O serviço retorna timeout ao consultar a API",
+    "category": "tecnico"
+  },
+  {
+    "text": "O formulário não salva as alterações realizadas",
+    "category": "tecnico"
+  },
+  {
+    "text": "O navegador mostra uma mensagem de falha no servidor",
+    "category": "tecnico"
+  },
+  {
+    "text": "O sistema duplica registros ao clicar no botão",
+    "category": "tecnico"
+  },
+  {
+    "text": "Sugestão de melhoria futura na navegação do aplicativo",
+    "category": "tecnico"
+  }
+]
