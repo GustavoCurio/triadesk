@@ -1,22 +1,21 @@
-# ↗ ChamadoFlow
+# ↗ TriaDesk
 
 **Uma mesa de atendimento que transforma relatos em próximas ações.**
 
 Organize chamados em **Novos → Em atendimento → Resolvidos**, receba sugestões de assunto e equipe, acompanhe os prazos e mantenha um histórico das decisões. A classificação usa aprendizado de máquina local; os rascunhos de resposta são textos por categoria, prontos para o operador adaptar.
 
-![Quadro operacional do ChamadoFlow](docs/images/quadro.jpg)
+![Quadro operacional do TriaDesk](docs/images/quadro.jpg)
 
 ## Experimente
 
-No Windows com Python 3.14 e as dependências instaladas, dê dois cliques em **Iniciar-ChamadoFlow.bat**. O navegador abre em `http://127.0.0.1:8504`.
+No Windows, use Python 3.14 e execute os comandos abaixo na raiz do projeto. O navegador abre em `http://127.0.0.1:8504`.
 
 Instalação em um ambiente separado:
 
 ```powershell
-cd D:\johh\GIT\ChamadoFlow
 py -3.14 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m streamlit run app.py
+.\.venv\Scripts\python.exe -m streamlit run app.py --server.port 8504 --server.showEmailPrompt false
 ```
 
 O projeto é testado com Python 3.12 e executado localmente com Python 3.14. Em Linux/macOS, use `python3 -m venv .venv` e `.venv/bin/python` nos comandos.
@@ -73,7 +72,7 @@ As transições permitidas são Novo → Em atendimento; Em atendimento → Novo
 A base é **sintética, em português e criada para o projeto**. Há 96 exemplos de treino e 44 de verificação: seis exemplos para cada um dos seis assuntos e oito perguntas fora do escopo. O conjunto de verificação faz parte do desenvolvimento, portanto os resultados não representam validação independente com clientes reais.
 
 ```powershell
-python -m chamadoflow evaluate
+python -m triadesk evaluate
 ```
 
 | Critério | Resultado no conjunto sintético |
@@ -104,7 +103,7 @@ python -m pytest -q
 ## API local
 
 ```powershell
-python -m uvicorn chamadoflow.api:app --host 127.0.0.1 --port 8004
+python -m uvicorn triadesk.api:app --host 127.0.0.1 --port 8004
 ```
 
 Abra `http://127.0.0.1:8004/docs` para testar as rotas.
@@ -145,14 +144,14 @@ Uma versão desatualizada retorna HTTP 409; chamado inexistente retorna 404 e um
 Também é possível classificar pela linha de comando:
 
 ```powershell
-python -m chamadoflow triage "Meu pedido está atrasado e a transportadora não atualiza o rastreio."
+python -m triadesk triage "Meu pedido está atrasado e a transportadora não atualiza o rastreio."
 ```
 
 ## Dados e execução
 
 Os arquivos `storage/demo.sqlite3` e `storage/chamados.sqlite3` são criados automaticamente e ignorados pelo Git. O primeiro recebe os exemplos na primeira execução; o segundo começa vazio. A API usa a base Meus chamados por padrão.
 
-`CHAMADOFLOW_HOME` altera a pasta de armazenamento da interface e da API; `CHAMADOFLOW_DB` pode definir um arquivo específico somente para a API. Não é necessário configurar chave de API, instalar modelo remoto ou carregar arquivos pickle de terceiros.
+`TRIADESK_HOME` altera a pasta de armazenamento da interface e da API; `TRIADESK_DB` pode definir um arquivo específico somente para a API. Não é necessário configurar chave de API, instalar modelo remoto ou carregar arquivos pickle de terceiros.
 
 O aplicativo é local, com persistência de conteúdo no computador. Não oferece autenticação ou controle de acesso por operador; a hospedagem externa exige esses recursos e limites de requisição. Os exemplos não contêm dados de clientes reais. O histórico é um registro operacional em SQLite, sem assinatura ou proteção contra alteração direta do arquivo.
 

@@ -1,4 +1,4 @@
-"""ChamadoFlow: quadro operacional e histórico local de atendimento."""
+"""TriaDesk: quadro operacional e histórico local de atendimento."""
 import csv
 from datetime import datetime
 from html import escape
@@ -12,20 +12,20 @@ import pandas as pd
 from pydantic import ValidationError
 import streamlit as st
 
-from chamadoflow.demo import seed_demo
-from chamadoflow.store import ChangeTicket, ConflictError, NewTicket, STATUSES, Store, TRANSITIONS, sla_state, utcnow
-from chamadoflow.triage import CATEGORIES, SLA_HOURS
+from triadesk.demo import seed_demo
+from triadesk.store import ChangeTicket, ConflictError, NewTicket, STATUSES, Store, TRANSITIONS, sla_state, utcnow
+from triadesk.triage import CATEGORIES, SLA_HOURS
 
 ROOT = Path(__file__).resolve().parent
 LOCAL_TZ = ZoneInfo("America/Sao_Paulo")
-st.set_page_config(page_title="ChamadoFlow · Mesa de atendimento", page_icon="↗", layout="wide")
+st.set_page_config(page_title="TriaDesk · Mesa de atendimento", page_icon="↗", layout="wide")
 st.markdown("""<style>
 .stApp{background:#eef1f6;color:#283346}.block-container{max-width:1550px;padding-top:3.6rem}
 h1,h2,h3{letter-spacing:-.035em}h1{font-size:1.9rem!important;padding:.25rem 0!important}
 .block-container [data-testid="stVerticalBlock"]{gap:.65rem}.block-container hr{margin:.3rem 0}
-div[class*="st-key-cf_card_"]{background:white;border-radius:12px}
-.cf-brand{font-weight:800;font-size:23px;color:#2c3854}.cf-brand b{color:#e3634c}
-.cf-brand span{font-size:11px;letter-spacing:2px;color:#8590a2;margin-left:20px;font-weight:600}
+div[class*="st-key-td_card_"]{background:white;border-radius:12px}
+.td-brand{font-weight:800;font-size:23px;color:#2c3854}.td-brand b{color:#e3634c}
+.td-brand span{font-size:11px;letter-spacing:2px;color:#8590a2;margin-left:20px;font-weight:600}
 .column-head{border-top:3px solid;padding:14px 4px;font-size:13px;letter-spacing:1.4px;font-weight:800}
 .column-head span{float:right;border-radius:5px;background:#dce2ec;padding:1px 8px;color:#34425c}
 .ticket{margin-bottom:3px}.ticket .meta{font:11px monospace;color:#8590a2;margin-bottom:12px}
@@ -35,7 +35,7 @@ div[class*="st-key-cf_card_"]{background:white;border-radius:12px}
 .ticket .due{font-size:12px;color:#71809a;margin-top:14px}.ticket .late{color:#c44234}.ticket .soon{color:#a77313}
 .queue-note{background:#fff5ed;border-left:3px solid #df8a48;padding:12px 16px;color:#8b582e;font-size:13px;margin:8px 0 12px}
 [data-testid="stVerticalBlockBorderWrapper"]{border-radius:12px}
-@media(max-width:700px){.cf-brand span{display:block;margin:6px 0}.ticket h4{font-size:16px}}
+@media(max-width:700px){.td-brand span{display:block;margin:6px 0}.ticket h4{font-size:16px}}
 </style>""", unsafe_allow_html=True)
 
 
@@ -54,14 +54,14 @@ def workspace(path, demo):
 
 def open_ticket(ticket_id):
     """Seleciona um chamado e muda a navegação no callback anterior ao rerun do Streamlit."""
-    st.session_state["cf_page"] = "Quadro"
-    st.session_state["cf_ticket"] = ticket_id
+    st.session_state["td_page"] = "Quadro"
+    st.session_state["td_ticket"] = ticket_id
 
 
 def switch_space():
     """Limpa a seleção e o último cadastro da sessão ao trocar entre demonstração e base própria."""
-    st.session_state.pop("cf_ticket", None)
-    st.session_state.pop("cf_created", None)
+    st.session_state.pop("td_ticket", None)
+    st.session_state.pop("td_created", None)
 
 
 def when(value):
@@ -90,13 +90,13 @@ def safe_csv(tickets):
     return buffer.getvalue().encode("utf-8-sig")
 
 
-st.markdown('<div class="cf-brand"><b>↗</b> ChamadoFlow<span>MESA DE ATENDIMENTO</span></div>', unsafe_allow_html=True)
+st.markdown('<div class="td-brand"><b>↗</b> TriaDesk<span>MESA DE ATENDIMENTO</span></div>', unsafe_allow_html=True)
 brand, spaces = st.columns([2.2, 1])
 with brand:
-    page = st.radio("Navegação", ["Quadro", "Novo chamado", "Avaliação"], horizontal=True, key="cf_page", label_visibility="collapsed")
+    page = st.radio("Navegação", ["Quadro", "Novo chamado", "Avaliação"], horizontal=True, key="td_page", label_visibility="collapsed")
 with spaces:
-    space = st.selectbox("Ambiente", ["Demonstração", "Meus chamados"], on_change=switch_space, key="cf_space", label_visibility="collapsed")
-home = Path(os.environ.get("CHAMADOFLOW_HOME", str(ROOT / "storage")))
+    space = st.selectbox("Ambiente", ["Demonstração", "Meus chamados"], on_change=switch_space, key="td_space", label_visibility="collapsed")
+home = Path(os.environ.get("TRIADESK_HOME", str(ROOT / "storage")))
 path = home / ("demo.sqlite3" if space == "Demonstração" else "chamados.sqlite3")
 store = workspace(str(path), space == "Demonstração")
 st.caption("Demonstração com chamados fictícios." if space == "Demonstração" else "Seus chamados são salvos neste computador. A API usa a base Meus chamados por padrão.")
@@ -114,13 +114,13 @@ if page == "Novo chamado":
         if submitted:
             try:
                 ticket = store.create(NewTicket(title=title, description=description, channel=channel))
-                st.session_state["cf_created"] = ticket["id"]
-                st.success(f"CF-{ticket['id']:04d} criado. Equipe sugerida: {ticket['team']}.")
+                st.session_state["td_created"] = ticket["id"]
+                st.success(f"TD-{ticket['id']:04d} criado. Equipe sugerida: {ticket['team']}.")
             except ValidationError:
                 st.error("Preencha um assunto de 3 a 120 caracteres e uma descrição de 15 a 4.000 caracteres.")
-        if st.session_state.get("cf_created"):
-            created_id = st.session_state["cf_created"]
-            st.button(f"Abrir CF-{created_id:04d}", on_click=open_ticket, args=(created_id,))
+        if st.session_state.get("td_created"):
+            created_id = st.session_state["td_created"]
+            st.button(f"Abrir TD-{created_id:04d}", on_click=open_ticket, args=(created_id,))
     with explanation:
         st.subheader("Do relato ao responsável")
         st.write("**1. Classificar**\n\nO modelo local sugere o assunto e a equipe. Quando o sinal é insuficiente, o chamado segue para triagem manual.")
@@ -132,7 +132,7 @@ elif page == "Avaliação":
     st.title("Como a triagem foi medida")
     report_path = ROOT / "reports/evaluation.json"
     if not report_path.exists():
-        st.info("Execute python -m chamadoflow evaluate para gerar o relatório.")
+        st.info("Execute python -m triadesk evaluate para gerar o relatório.")
     else:
         report = json.loads(report_path.read_text("utf-8"))
         st.write(f"**{report['train_count']} exemplos de treino · {report['test_count']} exemplos de verificação · textos sintéticos em português.**")
@@ -156,24 +156,24 @@ elif page == "Avaliação":
             st.caption("Linhas: assunto esperado. Colunas: encaminhamento realizado.")
         with st.expander("Ver casos e pontuações"):
             st.dataframe(pd.DataFrame(report["cases"]), hide_index=True, width="stretch")
-        st.download_button("Baixar avaliação · JSON", report_path.read_bytes(), "chamadoflow-avaliacao.json", "application/json")
+        st.download_button("Baixar avaliação · JSON", report_path.read_bytes(), "triadesk-avaliacao.json", "application/json")
     with st.expander("Modelo, regras e limites"):
         st.write("TF-IDF de palavras e caracteres + regressão logística. O treino usa somente data/train.json; a avaliação usa data/test.json, sem textos idênticos normalizados entre as bases. Os limiares são 0,40 de pontuação, 0,08 de margem entre classes e 0,08 de similaridade com o treino.")
         st.write("A prioridade é uma heurística separada do modelo: expressões como sistema fora do ar ou todos os usuários recebem prioridade alta. Sugestões e melhorias futuras recebem baixa; os demais relatos recebem normal. Os prazos são demonstrativos em horas corridas, sem calendário de feriados.")
         st.write("Rascunhos de resposta são modelos de texto locais por categoria. Nenhum LLM externo é usado e nenhuma mensagem é enviada.")
 
 else:
-    selected_id = st.session_state.get("cf_ticket")
+    selected_id = st.session_state.get("td_ticket")
     if selected_id:
         if st.button("← Voltar ao quadro"):
-            st.session_state.pop("cf_ticket", None)
+            st.session_state.pop("td_ticket", None)
             st.rerun()
         try:
             ticket = store.get(selected_id)
         except KeyError:
-            st.session_state.pop("cf_ticket", None)
+            st.session_state.pop("td_ticket", None)
             st.rerun()
-        st.caption(f"CF-{ticket['id']:04d} · {ticket['channel']} · criado em {when(ticket['created_at'])}")
+        st.caption(f"TD-{ticket['id']:04d} · {ticket['channel']} · criado em {when(ticket['created_at'])}")
         st.title(ticket["title"])
         content, actions = st.columns([1.65, 1], gap="large")
         with content:
@@ -184,7 +184,7 @@ else:
             st.subheader("Resposta sugerida")
             st.caption("Rascunho local por categoria. Confira a adequação antes de usar em um atendimento real.")
             st.code(store.draft(selected_id)["text"], language=None, wrap_lines=True)
-            st.caption("Nenhuma mensagem é enviada pelo ChamadoFlow.")
+            st.caption("Nenhuma mensagem é enviada pelo TriaDesk.")
             with st.expander("Histórico do chamado", expanded=True):
                 for event in reversed(store.events(selected_id)):
                     st.caption(f"{when(event['created_at'])} · {event['kind']}")
@@ -233,11 +233,11 @@ else:
         manual = sum(t["category"] == "triagem" and t["status"] != "Resolvido" for t in tickets)
         st.markdown(f'<div class="queue-note">{len(tickets)} chamados neste ambiente &nbsp; / &nbsp; {late} com prazo vencido &nbsp; / &nbsp; {manual} aguardando classificação manual</div>', unsafe_allow_html=True)
         search_col, team_col, priority_col, due_col = st.columns([1.6, 1.2, 1, 1])
-        search = search_col.text_input("Buscar chamado", placeholder="Assunto, descrição ou CF-0001")
+        search = search_col.text_input("Buscar chamado", placeholder="Assunto, descrição ou TD-0001")
         team = team_col.selectbox("Equipe", ["Todas"] + sorted({v[1] for v in CATEGORIES.values()}))
         priority_filter = priority_col.selectbox("Prioridade", ["Todas"] + list(SLA_HOURS))
         only_late = due_col.checkbox("Só vencidos")
-        filtered = [t for t in tickets if (not search or search.casefold() in (t["title"] + " " + t["description"] + f" CF-{t['id']:04d}").casefold()) and (team == "Todas" or t["team"] == team) and (priority_filter == "Todas" or t["priority"] == priority_filter) and (not only_late or (t["status"] != "Resolvido" and sla_state(t, now)["state"] == "Vencido"))]
+        filtered = [t for t in tickets if (not search or search.casefold() in (t["title"] + " " + t["description"] + f" TD-{t['id']:04d}").casefold()) and (team == "Todas" or t["team"] == team) and (priority_filter == "Todas" or t["priority"] == priority_filter) and (not only_late or (t["status"] != "Resolvido" and sla_state(t, now)["state"] == "Vencido"))]
         st.caption(f"{len(filtered)} chamados no recorte · prazos em horas corridas · atualize o quadro para renovar a situação dos prazos")
         cols = st.columns(3, gap="medium")
         for column, status, label, color in zip(cols, STATUSES, ["NOVOS", "EM ATENDIMENTO", "RESOLVIDOS"], ["#738aaf", "#d79a40", "#63a68e"]):
@@ -250,10 +250,10 @@ else:
                 for ticket in grouped:
                     sla = sla_state(ticket, now)
                     tone = "late" if sla["state"] in {"Vencido", "Resolvido após prazo"} else "soon" if sla["state"] == "Vence em breve" else ""
-                    with st.container(border=True, key=f"cf_card_{ticket['id']}"):
-                        st.markdown(f'''<div class="ticket"><div class="meta">CF-{ticket['id']:04d} · {escape(ticket['channel'])} · {escape(ticket['priority'])}</div><span class="tag">{escape(CATEGORIES[ticket['category']][0])}</span><h4>{escape(ticket['title'])}</h4><p>{escape(ticket['description'][:115])}{'…' if len(ticket['description']) > 115 else ''}</p><div class="due {tone}">{escape(sla['state'])} · {when(ticket['due_at'])}</div></div>''', unsafe_allow_html=True)
+                    with st.container(border=True, key=f"td_card_{ticket['id']}"):
+                        st.markdown(f'''<div class="ticket"><div class="meta">TD-{ticket['id']:04d} · {escape(ticket['channel'])} · {escape(ticket['priority'])}</div><span class="tag">{escape(CATEGORIES[ticket['category']][0])}</span><h4>{escape(ticket['title'])}</h4><p>{escape(ticket['description'][:115])}{'…' if len(ticket['description']) > 115 else ''}</p><div class="due {tone}">{escape(sla['state'])} · {when(ticket['due_at'])}</div></div>''', unsafe_allow_html=True)
                         st.caption(ticket["team"])
                         st.button("Abrir chamado ↗", key=f"open_{ticket['id']}", on_click=open_ticket, args=(ticket["id"],), width="stretch")
         st.divider()
-        st.download_button("Exportar recorte · CSV", safe_csv(filtered), "chamadoflow-quadro.csv", "text/csv")
+        st.download_button("Exportar recorte · CSV", safe_csv(filtered), "triadesk-quadro.csv", "text/csv")
         st.caption("As alterações ficam salvas no SQLite local. A demonstração usa uma base separada de Meus chamados.")

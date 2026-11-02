@@ -1,6 +1,6 @@
-# ChamadoFlow — do relato à próxima ação
+# TriaDesk — do relato à próxima ação
 
-Uma fila de atendimento mistura problemas de entrega, acesso, pagamento e funcionamento. Quando o assunto não está claro, o relato precisa de triagem antes de chegar à equipe adequada. O ChamadoFlow reúne essa organização em um quadro operacional com histórico e sugestões locais.
+Uma fila de atendimento mistura problemas de entrega, acesso, pagamento e funcionamento. Quando o assunto não está claro, o relato precisa de triagem antes de chegar à equipe adequada. O TriaDesk reúne essa organização em um quadro operacional com histórico e sugestões locais.
 
 ## Experiência do produto
 
@@ -37,11 +37,11 @@ Os 37 testes verificam as regras de atendimento, prazos, histórico, correções
 | Arquivo | Responsabilidade |
 |---|---|
 | `app.py` | Quadro, cadastro, operação e apresentação da avaliação |
-| `chamadoflow/triage.py` | Classificador, regras de prioridade e rascunhos |
-| `chamadoflow/store.py` | Validação, SQLite, histórico e situação dos prazos |
-| `chamadoflow/demo.py` | Chamados fictícios de demonstração |
-| `chamadoflow/api.py` | Integração HTTP local |
-| `chamadoflow/evaluation.py` | Avaliação e relatório reproduzível |
+| `triadesk/triage.py` | Classificador, regras de prioridade e rascunhos |
+| `triadesk/store.py` | Validação, SQLite, histórico e situação dos prazos |
+| `triadesk/demo.py` | Chamados fictícios de demonstração |
+| `triadesk/api.py` | Integração HTTP local |
+| `triadesk/evaluation.py` | Avaliação e relatório reproduzível |
 
 ## Referências técnicas
 

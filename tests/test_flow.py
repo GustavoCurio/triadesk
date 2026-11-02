@@ -8,11 +8,11 @@ from pydantic import ValidationError
 import pytest
 from streamlit.testing.v1 import AppTest
 
-from chamadoflow.api import app
-from chamadoflow.demo import seed_demo
-from chamadoflow.evaluation import evaluate
-from chamadoflow.store import ChangeTicket, ConflictError, NewTicket, Store, sla_state
-from chamadoflow.triage import CATEGORIES, classifier, draft_reply, suggest_priority
+from triadesk.api import app
+from triadesk.demo import seed_demo
+from triadesk.evaluation import evaluate
+from triadesk.store import ChangeTicket, ConflictError, NewTicket, Store, sla_state
+from triadesk.triage import CATEGORIES, classifier, draft_reply, suggest_priority
 
 ROOT = Path(__file__).resolve().parents[1]
 NOW = datetime(2026, 1, 10, 12, tzinfo=timezone.utc)
@@ -169,7 +169,7 @@ def test_demo_independent_and_seeded_once(store, tmp_path):
 
 
 def test_api_end_to_end_and_conflict(tmp_path, monkeypatch):
-    monkeypatch.setenv("CHAMADOFLOW_DB", str(tmp_path / "api.sqlite3"))
+    monkeypatch.setenv("TRIADESK_DB", str(tmp_path / "api.sqlite3"))
     with TestClient(app) as client:
         assert client.get("/health").json()["status"] == "ok"
         response = client.post("/tickets", json={"title": "Falha na entrega", "description": "A transportadora não entregou meu pacote no endereço correto."})
@@ -185,7 +185,7 @@ def test_api_end_to_end_and_conflict(tmp_path, monkeypatch):
 
 
 def test_api_validation_and_missing(tmp_path, monkeypatch):
-    monkeypatch.setenv("CHAMADOFLOW_DB", str(tmp_path / "api.sqlite3"))
+    monkeypatch.setenv("TRIADESK_DB", str(tmp_path / "api.sqlite3"))
     with TestClient(app) as client:
         assert client.post("/tickets", json={"title": "a", "description": "b"}).status_code == 422
         assert client.get("/tickets/999").status_code == 404
@@ -196,7 +196,7 @@ def test_api_validation_and_missing(tmp_path, monkeypatch):
 
 
 def test_ui_board_create_update_and_filter(tmp_path, monkeypatch):
-    monkeypatch.setenv("CHAMADOFLOW_HOME", str(tmp_path / "ui"))
+    monkeypatch.setenv("TRIADESK_HOME", str(tmp_path / "ui"))
     ui = AppTest.from_file(str(ROOT / "app.py"), default_timeout=60).run()
     assert not ui.exception
     assert len([b for b in ui.button if b.label == "Abrir chamado ↗"]) == 12
@@ -209,7 +209,7 @@ def test_ui_board_create_update_and_filter(tmp_path, monkeypatch):
     next(b for b in ui.button if b.label == "Criar chamado e sugerir triagem").click().run()
     assert not ui.exception
     assert ui.success
-    next(b for b in ui.button if b.label == "Abrir CF-0001").click().run()
+    next(b for b in ui.button if b.label == "Abrir TD-0001").click().run()
     assert not ui.exception
     assert any("Pagamento não confirmado" in t.value for t in ui.title)
     next(s for s in ui.selectbox if s.label == "Situação").set_value("Em atendimento")
@@ -224,7 +224,7 @@ def test_ui_board_create_update_and_filter(tmp_path, monkeypatch):
 
 
 def test_ui_evaluation_view(tmp_path, monkeypatch):
-    monkeypatch.setenv("CHAMADOFLOW_HOME", str(tmp_path / "evaluation_ui"))
+    monkeypatch.setenv("TRIADESK_HOME", str(tmp_path / "evaluation_ui"))
     ui = AppTest.from_file(str(ROOT / "app.py"), default_timeout=60).run()
     next(r for r in ui.radio if r.label == "Navegação").set_value("Avaliação").run()
     assert not ui.exception

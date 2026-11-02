@@ -8,17 +8,17 @@ from pydantic import BaseModel, Field
 from .store import ChangeTicket, ConflictError, NewTicket, Store, sla_state
 from .triage import triage
 
-app = FastAPI(title="ChamadoFlow", version="1.0.0")
+app = FastAPI(title="TriaDesk", version="1.0.0")
 
 
 def get_store():
     """Abre o repositório da API, criando sua estrutura quando necessário.
 
-    CHAMADOFLOW_DB tem precedência sobre CHAMADOFLOW_HOME/chamados.sqlite3.
+    TRIADESK_DB tem precedência sobre TRIADESK_HOME/chamados.sqlite3.
     Sem variáveis, usa storage/chamados.sqlite3 na raiz do projeto.
     """
-    home = Path(os.environ.get("CHAMADOFLOW_HOME", str(Path(__file__).resolve().parents[1] / "storage")))
-    return Store(os.environ.get("CHAMADOFLOW_DB", str(home / "chamados.sqlite3")))
+    home = Path(os.environ.get("TRIADESK_HOME", str(Path(__file__).resolve().parents[1] / "storage")))
+    return Store(os.environ.get("TRIADESK_DB", str(home / "chamados.sqlite3")))
 
 
 @app.get("/health")

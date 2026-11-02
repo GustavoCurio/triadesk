@@ -1,4 +1,4 @@
-"""Reproduz os arquivos sintéticos de treino e verificação do ChamadoFlow.
+"""Reproduz os arquivos sintéticos de treino e verificação do TriaDesk.
 
 Os textos são definidos explicitamente neste script. Ao executar ou importar
 o arquivo, data/train.json e data/test.json são sobrescritos em UTF-8.
@@ -6,7 +6,7 @@ Não utiliza relatos de clientes nem realiza coleta ou geração externa.
 """
 from pathlib import Path
 import json
-root=Path("D:/johh/GIT/ChamadoFlow/data")
+root = Path(__file__).resolve().parent / "data"
 root.mkdir(parents=True,exist_ok=True)
 train={
 "entrega": """Meu pedido está atrasado e ainda não chegou à minha casa|Preciso do código de rastreamento da encomenda|O rastreio diz entregue mas não recebi o pacote|Quero consultar a previsão de entrega do pedido|A transportadora não localizou meu endereço|Meu pacote está parado no centro de distribuição|Como acompanhar o envio da minha compra|O entregador veio mas eu não estava em casa|Minha encomenda foi enviada para outra cidade|Gostaria de corrigir o endereço antes da entrega|Não consigo rastrear o pedido na transportadora|Faltou informar o complemento do endereço de entrega|O prazo para receber o pacote já terminou|A entrega está com status de destinatário ausente|O pedido não saiu para transporte até agora|Onde está a encomenda que comprei na semana passada""",

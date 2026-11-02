@@ -1,6 +1,6 @@
 # Exemplos de atendimento em português
 
-Base sintética criada para o ChamadoFlow. Não contém mensagens recebidas de clientes, registros de empresas ou dados pessoais reais.
+Base sintética criada para o TriaDesk. Não contém mensagens recebidas de clientes, registros de empresas ou dados pessoais reais.
 
 - `train.json`: 96 exemplos, 16 para cada um dos seis assuntos.
 - `test.json`: 44 exemplos; 6 por assunto e 8 perguntas fora do escopo, com rótulo esperado `triagem`.
