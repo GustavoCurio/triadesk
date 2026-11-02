@@ -15,15 +15,22 @@ TRANSITIONS = {"Novo": {"Em atendimento"}, "Em atendimento": {"Novo", "Resolvido
 
 
 def utcnow():
+    """Retorna o instante atual como datetime com fuso UTC."""
     return datetime.now(timezone.utc)
 
 
 def iso(value):
+    """Converte datetime com fuso em texto ISO 8601 normalizado para UTC.
+
+    Raises:
+        ValueError: A data recebida não tem informação válida de fuso horário.
+    """
     if value.tzinfo is None or value.utcoffset() is None:
         raise ValueError("Use data com fuso horário.")
     return value.astimezone(timezone.utc).isoformat()
 
 
+# Entrada de cadastro: limita conteúdo, canal e campos extras antes de persistir.
 class NewTicket(BaseModel):
     model_config = ConfigDict(extra="forbid")
     title: str = Field(min_length=3, max_length=120)
@@ -33,9 +40,11 @@ class NewTicket(BaseModel):
     @field_validator("title", "description", mode="before")
     @classmethod
     def strip_text(cls, value):
+        """Remove espaços externos dos campos textuais antes de validar seus limites."""
         return value.strip() if isinstance(value, str) else value
 
 
+# Alteração com versão esperada; transições e existência do ID são conferidas no Store.
 class ChangeTicket(BaseModel):
     model_config = ConfigDict(extra="forbid")
     version: int = Field(ge=1)
@@ -46,10 +55,28 @@ class ChangeTicket(BaseModel):
 
 
 class ConflictError(ValueError):
+    """A versão recebida está desatualizada em relação ao chamado persistido."""
     pass
 
 
 def sla_state(ticket, now=None):
+    """Calcula a situação do prazo usando a resolução ou o relógio informado.
+
+    Args:
+        ticket: Registro com status, due_at e resolved_at coerentes entre si.
+        now: Instante com fuso para chamados abertos; None usa utcnow.
+
+    Returns:
+        Dicionário state/remaining_hours. Prazo aberto negativo é Vencido;
+        de zero até duas horas é Vence em breve. Chamados resolvidos comparam
+        o prazo com resolved_at, independentemente do momento da consulta.
+
+    Raises:
+        ValueError: A referência efetiva de tempo está sem fuso.
+
+    Horas são corridas, sem expediente ou feriados. Exatamente no prazo
+    ainda é considerado no prazo para resolução.
+    """
     end = datetime.fromisoformat(ticket["resolved_at"]) if ticket["status"] == "Resolvido" else (now or utcnow())
     if end.tzinfo is None:
         raise ValueError("Use data com fuso horário.")
@@ -60,7 +87,19 @@ def sla_state(ticket, now=None):
 
 
 class Store:
+    """Repositório SQLite local de chamados e eventos de atendimento.
+
+    Cada operação abre e fecha sua conexão. Criação/alteração e seus eventos
+    são gravados na mesma transação. Não implementa autenticação por operador.
+    """
     def __init__(self, path):
+        """Cria a pasta e as tabelas se necessário, preservando registros existentes.
+
+        Args:
+            path: Caminho de um arquivo SQLite local; a pasta pai é criada.
+
+        Erros de permissão, arquivo inválido ou SQLite são propagados ao chamador.
+        """
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
@@ -80,6 +119,14 @@ class Store:
 
     @contextmanager
     def connect(self):
+        """Fornece conexão transacional com chaves estrangeiras e espera de até dez segundos.
+
+        Yields:
+            Conexão SQLite com linhas acessíveis por nome de coluna.
+
+        Confirma a transação ao sair normalmente; em exceção, desfaz alterações
+        pendentes. Fecha a conexão em ambos os casos para liberar arquivo e locks.
+        """
         db = sqlite3.connect(self.path, timeout=10)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys=ON")
@@ -91,16 +138,26 @@ class Store:
 
     @staticmethod
     def decode(row):
+        """Converte uma linha SQLite em dicionário e desserializa a sugestão original do modelo."""
         ticket = dict(row)
         ticket["suggestion"] = json.loads(ticket["suggestion"])
         return ticket
 
     def list(self):
+        """Retorna chamados do mais recente ao mais antigo, desempate por ID decrescente."""
         with self.connect() as db:
             rows = db.execute("SELECT * FROM tickets ORDER BY created_at DESC, id DESC").fetchall()
         return [self.decode(row) for row in rows]
 
     def get(self, ticket_id):
+        """Lê um chamado por identificador com consulta parametrizada.
+
+        Returns:
+            Dicionário do registro com suggestion desserializada.
+
+        Raises:
+            KeyError: O chamado não existe no arquivo deste repositório.
+        """
         with self.connect() as db:
             row = db.execute("SELECT * FROM tickets WHERE id=?", (ticket_id,)).fetchone()
         if row is None:
@@ -108,11 +165,32 @@ class Store:
         return self.decode(row)
 
     def events(self, ticket_id):
+        """Retorna eventos do chamado em ordem crescente de inserção.
+
+        O campo details de cada evento é desserializado. Gera KeyError se o
+        chamado não existe, mesmo que a tabela de eventos não contenha registros.
+        """
         self.get(ticket_id)
         with self.connect() as db:
             return [{**dict(row), "details": json.loads(row["details"])} for row in db.execute("SELECT * FROM events WHERE ticket_id=? ORDER BY id", (ticket_id,))]
 
     def create(self, request: NewTicket, now=None):
+        """Classifica um novo chamado e persiste sua criação com o primeiro evento.
+
+        Args:
+            request: NewTicket validado, contendo assunto, descrição e canal declarado.
+            now: Instante com fuso da criação; None usa o relógio UTC atual.
+
+        Returns:
+            Registro lido após gravar, inicialmente com status Novo e versão 1.
+
+        Raises:
+            ValueError: A referência de criação está sem fuso; falhas de triagem
+                ou persistência também são propagadas.
+
+        Assunto e descrição alimentam a triagem. A equipe deriva da categoria e
+        o prazo soma horas corridas à criação. O canal é metadado, não integração.
+        """
         now = now or utcnow()
         created = iso(now)
         suggestion = triage(request.title + "\n" + request.description)
@@ -125,9 +203,30 @@ class Store:
         return self.get(ticket_id)
 
     def update(self, ticket_id, change: ChangeTicket, now=None):
+        """Aplica uma alteração validada e registra os estados anterior e posterior.
+
+        Args:
+            ticket_id: Identificador do chamado neste arquivo SQLite.
+            change: ChangeTicket com versão lida pelo operador e novos campos.
+            now: Instante com fuso da operação; None usa utcnow.
+
+        Returns:
+            Registro lido após confirmar a transação, com versão incrementada.
+
+        Raises:
+            KeyError: O chamado não existe.
+            ConflictError: A versão informada não coincide com a persistida.
+            ValueError: Transição inválida, data sem fuso ou alteração anterior à criação.
+
+        BEGIN IMMEDIATE bloqueia escritas concorrentes antes de conferir a versão.
+        A equipe acompanha a categoria. A prioridade recalcula o prazo desde a
+        criação; reabrir limpa resolved_at, sem reiniciar o relógio do prazo.
+        A sugestão automática original é preservada. Registro e evento são atômicos.
+        """
         now = now or utcnow()
         stamp = iso(now)
         with self.connect() as db:
+            # Ler e comparar a versão sob o mesmo lock evita perder uma alteração concorrente.
             db.execute("BEGIN IMMEDIATE")
             row = db.execute("SELECT * FROM tickets WHERE id=?", (ticket_id,)).fetchone()
             if row is None:
@@ -140,12 +239,18 @@ class Store:
             if now < datetime.fromisoformat(previous["created_at"]):
                 raise ValueError("A alteração não pode ocorrer antes da criação.")
             resolved = previous["resolved_at"] if previous["status"] == change.status == "Resolvido" else stamp if change.status == "Resolvido" else None
+            # A criação continua como referência; prioridade e reabertura não reiniciam a contagem.
             due = iso(datetime.fromisoformat(previous["created_at"]) + timedelta(hours=SLA_HOURS[change.priority]))
             db.execute("""UPDATE tickets SET status=?,category=?,team=?,priority=?,due_at=?,resolved_at=?,version=version+1 WHERE id=?""", (change.status, change.category, CATEGORIES[change.category][1], change.priority, due, resolved, ticket_id))
+            # O evento é gravado na mesma transação do chamado, preservando a rastreabilidade.
             details = {"before": {k: previous[k] for k in ["status", "category", "priority"]}, "after": change.model_dump(exclude={"version", "note"}), "note": change.note.strip()}
             db.execute("INSERT INTO events(ticket_id,created_at,kind,details) VALUES (?,?,?,?)", (ticket_id, stamp, "atualizado", json.dumps(details, ensure_ascii=False)))
         return self.get(ticket_id)
 
     def draft(self, ticket_id):
+        """Lê a categoria atual e retorna o template local com sent=False.
+
+        Não persiste resposta nem realiza envio. Chamado inexistente gera KeyError.
+        """
         ticket = self.get(ticket_id)
         return {"ticket_id": ticket_id, "category": ticket["category"], "text": draft_reply(ticket["category"]), "sent": False, "method": "template_local"}

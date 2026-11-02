@@ -12,6 +12,22 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def evaluate():
+    """Treina uma instância independente e mede o encaminhamento no conjunto sintético.
+
+    Returns:
+        Relatório com métricas, baseline, matriz de confusão, abstenções,
+        limiares e resultados por caso. Esta função não grava o relatório.
+
+    Raises:
+        ValueError: Há texto normalizado repetido no teste ou sobreposição
+            exata entre treino e teste. Erros de leitura/treinamento são propagados.
+
+    Lê data/train.json e data/test.json separadamente. O baseline aprende a
+    classe majoritária do treino. As métricas de encaminhamento incluem
+    triagem como classe: abster-se em assunto conhecido conta como erro.
+    automatic_accuracy considera apenas sugestões aceitas; não é acerto geral.
+    A avaliação sintética não mede operação real, prioridade ou rascunhos.
+    """
     train = json.loads((ROOT / "data/train.json").read_text("utf-8"))
     test = json.loads((ROOT / "data/test.json").read_text("utf-8"))
     train_text = {normalize(row["text"]).strip() for row in train}
@@ -25,6 +41,7 @@ def evaluate():
     labels = list(CATEGORIES)
     baseline = DummyClassifier(strategy="most_frequent").fit([[0]] * len(train), [r["category"] for r in train])
     baseline_predictions = baseline.predict([[0]] * len(test))
+    # Acerto entre aceitos usa um subconjunto; as métricas gerais também penalizam abstenções.
     accepted = [(truth, pred["category"]) for truth, pred in zip(expected, predictions) if not pred["needs_review"]]
     scope = [i for i, label in enumerate(expected) if label != "triagem"]
     unknown = [i for i, label in enumerate(expected) if label == "triagem"]
@@ -52,6 +69,11 @@ def evaluate():
 
 
 def save_report(path):
+    """Executa a avaliação e grava o relatório JSON UTF-8 no caminho recebido.
+
+    Cria a pasta pai, substitui o arquivo de destino e retorna o relatório.
+    Falhas de leitura, avaliação ou escrita são propagadas ao chamador.
+    """
     report = evaluate()
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)

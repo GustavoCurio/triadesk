@@ -1,3 +1,4 @@
+"""Classificação de relatos e avaliação reproduzível pela linha de comando."""
 import argparse
 from pathlib import Path
 
@@ -7,6 +8,12 @@ import json
 
 
 def main():
+    """Oferece classificação local e geração do relatório de avaliação pelo terminal.
+
+    triage valida tamanho e imprime a sugestão em JSON. evaluate grava o
+    relatório no destino escolhido e imprime métricas resumidas. Erros de
+    argumentos usam o código 2 do argparse; falhas de domínio/I/O são propagadas.
+    """
     parser = argparse.ArgumentParser(description="ChamadoFlow: classificação local e avaliação")
     commands = parser.add_subparsers(dest="command", required=True)
     classify = commands.add_parser("triage")

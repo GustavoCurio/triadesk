@@ -5,6 +5,17 @@ from .store import ChangeTicket, NewTicket, utcnow
 
 
 def seed_demo(store, now=None):
+    """Popula uma base vazia com doze chamados fictícios e suas transições.
+
+    Args:
+        store: Store da demonstração; base com qualquer chamado é preservada.
+        now: Referência com fuso para os deslocamentos de tempo, ou utcnow.
+
+    Cada coluna recebe quatro exemplos. Datas relativas permitem mostrar
+    prazos vencidos e próximos do vencimento na primeira execução. O cache
+    da interface coordena a inicialização; esta rotina não garante um seed
+    atômico entre processos concorrentes nem repõe uma carga parcial.
+    """
     if store.list():
         return
     now = now or utcnow()

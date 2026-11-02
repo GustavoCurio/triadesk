@@ -1,3 +1,9 @@
+"""Reproduz os arquivos sintéticos de treino e verificação do ChamadoFlow.
+
+Os textos são definidos explicitamente neste script. Ao executar ou importar
+o arquivo, data/train.json e data/test.json são sobrescritos em UTF-8.
+Não utiliza relatos de clientes nem realiza coleta ou geração externa.
+"""
 from pathlib import Path
 import json
 root=Path("D:/johh/GIT/ChamadoFlow/data")

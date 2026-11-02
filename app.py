@@ -41,6 +41,11 @@ div[class*="st-key-cf_card_"]{background:white;border-radius:12px}
 
 @st.cache_resource
 def workspace(path, demo):
+    """Abre o Store em cache e carrega exemplos somente no ambiente demonstrativo.
+
+    O cache de recursos usa path/demo como chave e compartilha o repositório
+    entre sessões do processo. As operações do Store abrem conexões próprias.
+    """
     store = Store(path)
     if demo:
         seed_demo(store)
@@ -48,20 +53,33 @@ def workspace(path, demo):
 
 
 def open_ticket(ticket_id):
+    """Seleciona um chamado e muda a navegação no callback anterior ao rerun do Streamlit."""
     st.session_state["cf_page"] = "Quadro"
     st.session_state["cf_ticket"] = ticket_id
 
 
 def switch_space():
+    """Limpa a seleção e o último cadastro da sessão ao trocar entre demonstração e base própria."""
     st.session_state.pop("cf_ticket", None)
     st.session_state.pop("cf_created", None)
 
 
 def when(value):
+    """Converte texto ISO com fuso para dia/hora de São Paulo, conforme os registros do Store."""
     return datetime.fromisoformat(value).astimezone(LOCAL_TZ).strftime("%d/%m · %H:%M")
 
 
 def safe_csv(tickets):
+    """Exporta o recorte do quadro como bytes CSV UTF-8 com BOM.
+
+    Args:
+        tickets: Registros do Store já filtrados pelo quadro.
+
+    Returns:
+        CSV com ID, assunto, categoria, equipe, prioridade, estado e datas.
+        Não inclui descrição completa nem notas internas. Prefixos comuns
+        de fórmulas são neutralizados com apóstrofo apenas nesta exportação.
+    """
     buffer = io.StringIO(newline="")
     fields = ["id", "title", "category", "team", "priority", "status", "created_at", "due_at", "resolved_at"]
     writer = csv.writer(buffer)

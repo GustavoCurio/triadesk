@@ -28,11 +28,25 @@ SIMILARITY_THRESHOLD = 0.08
 
 
 def normalize(text):
+    """Padroniza caixa e remove marcas de acento para deduplicação e regras textuais."""
     return "".join(c for c in unicodedata.normalize("NFKD", text.casefold()) if not unicodedata.combining(c))
 
 
 class Classifier:
+    """Pipeline local de TF-IDF/regressão logística com abstenção para triagem manual."""
     def __init__(self, rows):
+        """Valida os exemplos e ajusta vetorizadores e classificador somente no treino.
+
+        Args:
+            rows: Lista não vazia de objetos text/category dos seis assuntos conhecidos.
+
+        Raises:
+            ValueError: Base vazia, categoria inválida/triagem ou texto normalizado repetido.
+
+        A classe triagem é uma decisão de abstenção, não um rótulo aprendido.
+        Os vetores de treino são guardados para medir similaridade na inferência.
+        Erros estruturais dos exemplos e de ajuste do scikit-learn são propagados.
+        """
         if not rows or any(row["category"] not in CATEGORIES or row["category"] == "triagem" for row in rows):
             raise ValueError("Base de treino inválida.")
         normalized = [normalize(row["text"]).strip() for row in rows]
@@ -49,6 +63,20 @@ class Classifier:
         self.train_vectors = self.model.named_steps["features"].transform([r["text"] for r in rows])
 
     def predict(self, text):
+        """Sugere um assunto e decide se o sinal permite encaminhamento automático.
+
+        Args:
+            text: Relato textual; limites de entrada são tratados pelos chamadores.
+
+        Returns:
+            Dicionário com category, candidate, score, margin, similarity,
+            needs_review e reason. category vira triagem se qualquer limiar falhar;
+            candidate conserva o assunto de maior pontuação.
+
+        Exige pontuação >= 0,40, margem >= 0,08 e similaridade máxima com o treino
+        >= 0,08. A decisão usa valores antes do arredondamento. Os sinais não são
+        probabilidades calibradas nem detector universal de assuntos desconhecidos.
+        """
         probabilities = self.model.predict_proba([text])[0]
         order = np.argsort(probabilities)[::-1]
         score = float(probabilities[order[0]])
@@ -56,6 +84,7 @@ class Classifier:
         vector = self.model.named_steps["features"].transform([text])
         similarity = float(cosine_similarity(vector, self.train_vectors).max())
         candidate = str(self.model.classes_[order[0]])
+        # Abster-se é uma decisão do encaminhamento; preservamos também o melhor candidato.
         accepted = score >= SCORE_THRESHOLD and margin >= MARGIN_THRESHOLD and similarity >= SIMILARITY_THRESHOLD
         return {"category": candidate if accepted else "triagem", "candidate": candidate,
                 "score": round(score, 4), "margin": round(margin, 4), "similarity": round(similarity, 4),
@@ -65,11 +94,24 @@ class Classifier:
 
 @lru_cache(maxsize=1)
 def classifier():
+    """Treina e reutiliza uma instância do modelo por processo, lendo apenas data/train.json."""
     rows = json.loads((ROOT / "data/train.json").read_text("utf-8"))
     return Classifier(rows)
 
 
 def suggest_priority(text):
+    """Sugere prioridade por expressões configuradas e retorna sua justificativa.
+
+    Args:
+        text: Relato a normalizar, sem depender da categoria sugerida pelo modelo.
+
+    Returns:
+        Par (prioridade, motivo): expressão crítica gera Alta; sugestão,
+        elogio ou melhoria futura gera Baixa; ausência dessas regras gera Normal.
+
+    A precedência é crítica antes de baixa. É uma heurística textual: não
+    interpreta negações ou impacto real e pode ser corrigida pelo operador.
+    """
     plain = normalize(text)
     critical = ["sistema fora do ar", "sistema indisponivel", "todos os usuarios", "vazamento de dados", "suspeita de invasao", "conta invadida"]
     matched = next((term for term in critical if term in plain), None)
@@ -81,12 +123,22 @@ def suggest_priority(text):
 
 
 def triage(text):
+    """Combina classificação, equipe por categoria e prioridade sugerida.
+
+    Recebe o relato e retorna o diagnóstico do classificador acrescido de
+    team, priority e priority_reason. Não grava chamados nem envia mensagens.
+    """
     result = classifier().predict(text)
     priority, reason = suggest_priority(text)
     return {**result, "team": CATEGORIES[result["category"]][1], "priority": priority, "priority_reason": reason}
 
 
 def draft_reply(category):
+    """Retorna um rascunho local para uma categoria definida em CATEGORIES.
+
+    O texto é um template fixo, não uma geração por LLM ou confirmação de
+    entrega, estorno ou ação externa. Categoria desconhecida gera KeyError.
+    """
     drafts = {
         "entrega": "Recebemos sua solicitação sobre a entrega. A equipe de logística verificará o rastreio e as informações disponíveis. Ainda não há uma nova data confirmada. Não envie dados pessoais por este canal demonstrativo.",
         "pagamento": "Recebemos sua dúvida sobre o pagamento. A equipe financeira verificará a situação nos canais autenticados. Não envie número de cartão, senha ou comprovantes com dados pessoais nesta demonstração.",
